@@ -1,0 +1,49 @@
+<h1><%= @memo.title %></h1>
+<hr>
+<h2><%= @memo.user.email %></h2>
+<h2><%= local_time(@memo.created_at)%></h2>
+
+<% if current_user.email == @memo.user.email %>
+<%= link_to '수정', edit_memo_path %>
+<%= link_to '삭제', memo_path, method: :delete %>
+<% end %>
+<hr>
+
+<%= @memo.content.html_safe %>
+<hr>
+
+<p>
+  <strong> hashtag : </strong>
+  <% @memo.hashtags.each do |x| %>
+   <%= x.title %>
+  <% end %>
+</p>
+
+<div class="well">
+    <%= bootstrap_form_for ([@memo, @memo.comments.new]) do |f| %>
+    <%= f.hidden_field :user_id, value: current_user.id %>
+    <%= f.text_area :content, label: "댓글 작성" %>
+    <%= f.submit :작성 %>
+    <% end %>
+</div>
+<hr>
+<div>
+    댓글 보여주는 곳
+    <div class= well>
+    <% if @memo.comments.present? %>
+      <% @memo.comments.each do |comment| %>
+        <% if comment.content != nil %>
+        댓글주 : <%= comment.user.email %> <br>
+        댓글 : <%= comment.content %><br>
+        댓글 작성시간 : <%= local_time(comment.created_at) %>
+          <% if comment.user.id == current_user.id %>
+          <div><%= link_to "삭제", memo_comment_path(@memo, comment), method: "delete" %></div>
+          <% end %>
+        <% end %>
+      <% end %>
+    <% end %>
+    <% if @memo.comments == nil? %>
+    <%= "노코멘트" %>
+    <% end %>
+    </div>
+</div>

@@ -1,0 +1,36 @@
+<h1><strong>QnA</strong></h1>
+<div class="table-responsive">
+    <table class="table table-fit">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>User</th>
+                <th>Comments</th>
+            </tr>
+        </thead>
+        <div class="search", style="text-align: right;">
+            <%= form_tag(memos_path, :method => "get", id: "search-form") do %>
+              <%= text_field_tag :search, params[:search], placeholder: "Search Posts" %>
+              <%= submit_tag "Search" %>
+            <% end %>
+        </div>
+        <tbody>
+            <% @memos.each do |x|%>
+            <tr>
+                <td><%= link_to(x.title, memo_path(x.id)) %></td>
+                <td><%= x.user.email %></td>
+                <td><% x.comments.each do |comment| %>
+                <% if comment.content.size > 0 %>
+                <%= comment.content %>
+                <% elsif comment.content.empty? %>
+                <% comment.content = "No comment" %>
+                <%= comment.content %>
+                <% end %>
+                <% end %>
+                </td>
+            </tr>
+            <% end %>
+        </tbody>
+    </table>
+    <%= paginate @memos %>
+</div>

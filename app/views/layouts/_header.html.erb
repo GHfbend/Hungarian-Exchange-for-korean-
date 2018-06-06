@@ -1,0 +1,17 @@
+<header class="navbar navbar-fixed-top navbar-inverse">
+  <div class="container">
+    <%=link_to '헝가리어 교류', root_path, id: 'logo'%>
+    <nav>
+      <ul class="nav navbar-nav navbar-right">
+        <li><%=link_to 'Home', root_path %></li>
+        <li><%=link_to 'QnA', new_memo_path %></li>
+        <% if user_signed_in?%>
+            <li><%=link_to '로그아웃', destroy_user_session_path, method: :delete  %></li>
+        <%else%>
+            <li><%=link_to '로그인', new_user_password_path %></li>
+            <li><%=link_to '회원가입', new_user_registration_path %></li>
+        <%end%>
+      </ul>
+    </nav>
+  </div>
+</header>
