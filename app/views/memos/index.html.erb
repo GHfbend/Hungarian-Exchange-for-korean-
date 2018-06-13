@@ -6,6 +6,7 @@
                 <th>Title</th>
                 <th>User</th>
                 <th>Comments</th>
+                <th>조회수</th>
             </tr>
         </thead>
         <div class="search", style="text-align: right;">
@@ -28,6 +29,7 @@
                 <% end %>
                 <% end %>
                 </td>
+                <td><%= "#{x.unique_impression_count}"%></td>
             </tr>
             <% end %>
         </tbody>

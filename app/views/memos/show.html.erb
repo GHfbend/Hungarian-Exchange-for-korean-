@@ -3,9 +3,11 @@
 <h2><%= @memo.user.email %></h2>
 <h2><%= local_time(@memo.created_at)%></h2>
 
-<% if current_user.email == @memo.user.email %>
-<%= link_to '수정', edit_memo_path %>
-<%= link_to '삭제', memo_path, method: :delete %>
+<% if can? :update, @memo %>
+  <%= link_to '수정', edit_memo_path %>
+<% end %>
+<% if can? :destroy, @memo %>
+  <%= link_to '삭제', memo_path, method: :delete, data: {confirm: "진짜로 지우시겠습니까?"} %>
 <% end %>
 <hr>
 
@@ -28,7 +30,7 @@
 </div>
 <hr>
 <div>
-    댓글 보여주는 곳
+    Answers
     <div class= well>
     <% if @memo.comments.present? %>
       <% @memo.comments.each do |comment| %>

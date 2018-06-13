@@ -1,6 +1,9 @@
 class MemosController < ApplicationController
   before_action :authenticate_user!, except: [:index, :show]
   before_action :set_memo, only: [:show, :edit, :update, :destroy]
+  before_action :is_owner?, only: [:edit, :update, :destroy]
+  before_action :log_impression, only: [:show]
+  load_and_authorize_resource
   
   def index
     @memos = Memo.all
@@ -13,7 +16,7 @@ class MemosController < ApplicationController
 
   def new
     @memo = Memo.new
-    3.times { @memo.hashtags.new }
+    1.times { @memo.hashtags.new }
   end
   
   def show
@@ -49,6 +52,14 @@ class MemosController < ApplicationController
     redirect_to memos_path
   end
   
+  def quiz
+    
+  end
+  
+  def intro
+    
+  end
+
   private
   def set_memo
     @memo = Memo.find(params[:id])
@@ -60,5 +71,14 @@ class MemosController < ApplicationController
   
   def hashtag_params
     params.require(:memo).permit(hashtags_attributes: [:title])
+  end
+  
+  def is_owner?
+    redirect_to root_path unless current_user == @memo.user or :admin
+  end
+  
+  def log_impression
+    @hit_memo = Memo.find(params[:id])
+    @hit_memo.impressions.create(ip_address: request.remote_ip, user_id:current_user.id)
   end
 end
